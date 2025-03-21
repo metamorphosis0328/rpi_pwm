@@ -25,6 +25,7 @@ public:
 	}
 	fprintf(fp, "%d", channel);
 	fclose(fp);
+	usleep(100000);
 	per = (int)1E9 / frequency;
 	setPeriod(per);
 	setDutyCycle(duty_cycle);

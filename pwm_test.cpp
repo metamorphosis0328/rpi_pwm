@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[]) {
     int channel = 2;
-    int frequency = 50; // Hz
+    int frequency = 100; // Hz
     if (argc > 1) {
 	channel = atoi(argv[1]);
     }
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
     printf("Duty cycle at 25%%\n");
     pwm.setDutyCycle(25);
     getchar();
-    printf("Duty cycle at 25%%\n");
+    printf("Duty cycle at 75%%\n");
     pwm.setDutyCycle(75);
     getchar();
 }
