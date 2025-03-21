@@ -1,0 +1,9 @@
+pinctrl: https://github.com/raspberrypi/utils/blob/master/pinctrl/README.md
+
+pinctrl -p
+
+cd /sys/class/pwm/pwmchip2/pwm2
+/sys/class/pwm/pwmchip2/pwm2 $ echo 1000000 > period
+/sys/class/pwm/pwmchip2/pwm2 $ echo 500000 > duty_cycle 
+/sys/class/pwm/pwmchip2/pwm2 $ echo 1 > enable 
+
