@@ -52,9 +52,9 @@ and start the PWM:
 ```
 pwm.start(channel, frequency);
 ```
-where `channel` is either 2 (GPIO18) or 3 (GPIO19) and starts the PWM at 0% duty cycle.
+where `channel` is either 2 (GPIO18) or 3 (GPIO19) at 0% duty-cycle as a default.
 
-To set the duty cycle just call `setDutyCycle`:
+To set the duty-cycle just call `setDutyCycle`:
 
 ```
 pwm.setDutyCycle(duty_cycle);
@@ -72,7 +72,7 @@ where `duty_cycle` is a value between 0 and 100.
 
 where channel can be either 2 (GPIO18) or 3 (GPIO19). Default is 2.
 
-It starts with a duty of 50%. If you press a key it changes it to 25%
+It starts with a duty-cycle of 50%. If you press a key it changes it to 25%
 and then after another key press to 75%. Then it exists after
 a final key press.
 
