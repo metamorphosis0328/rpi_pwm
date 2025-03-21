@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-    RPI_PWM pwm(0, 50);
+    RPI_PWM pwm(2, 50);
     printf("Duty cycle at 50%%\n");
     pwm.setDutyCycle(50);
     getchar();
