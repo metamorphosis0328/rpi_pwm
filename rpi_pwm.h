@@ -19,28 +19,35 @@ public:
 	std::string p = chippath+"/export";
 	std::cout << p << std::endl;
 	fp = fopen(p.c_str(), "w");
+	if (NULL == fp) {
+	    fprintf(stderr,"PWM device does not exist. Make sure to add 'dtoverlay=pwm-2chan' to /boot/firmware/config.txt.\n");
+	    return;
+	}
 	fprintf(fp, "%d", channel);
 	fclose(fp);
 	per = (int)1E9 / frequency;
 	setPeriod(per);
 	setDutyCycle(duty_cycle);
+	enable();
     }
     
     ~RPI_PWM() {
 	disable();
     }
 
+    void setDutyCycle(float v) {
+	int dc = (int)round((float)per * (v / 100.0));
+	setDutyCycleNS(dc);
+    }
+
+private:
+    
     void setPeriod(int ns) {
 	writeSYS(pwmpath+"/"+"period", ns);
     }
 
     void setDutyCycleNS(int ns) {
 	writeSYS(pwmpath+"/"+"duty_cycle", ns);
-    }
-
-    void setDutyCycle(float v) {
-	int dc = round((float)per * (v / 100.0));
-	setDutyCycleNS(dc);
     }
 
     void enable() {
@@ -51,8 +58,6 @@ public:
 	writeSYS(pwmpath+"/"+"enable", 0);
     }
 
-private:
-    
     int per = 0;
     
     std::string chippath;
@@ -61,6 +66,10 @@ private:
     void writeSYS(std::string filename, int value) {
 	FILE* fp;
 	fp = fopen(filename.c_str(), "w");
+	if (NULL == fp) {
+	    fprintf(stderr,"Cannot write to %s.",filename.c_str());
+	    return;
+	}
 	fprintf(fp, "%d", value);
 	fclose(fp);
     }

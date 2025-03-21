@@ -6,7 +6,13 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-    RPI_PWM pwm(2, 50);
+    int channel = 2;
+    int frequency = 50; // Hz
+    if (argc > 1) {
+	channel = atoi(argv[1]);
+    }
+    printf("Enabling PWM on channel %d.\n",channel);
+    RPI_PWM pwm(channel, frequency);
     printf("Duty cycle at 50%%\n");
     pwm.setDutyCycle(50);
     getchar();
