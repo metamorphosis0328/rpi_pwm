@@ -9,11 +9,14 @@
 #include <iostream>
 #include<math.h>
 
+/**
+ * PWM class for the Raspberry PI 5
+ **/
 class RPI_PWM {
 public:
 
     /**
-     * PWM class for the Raspberry PI
+     * Starts the PWM
      * \param channel The GPIO channel which is 2 or 3 for the RPI5
      * \param frequency The PWM frequency
      * \param duty_cycle The initial duty cycle of the PWM (default 0)
@@ -40,6 +43,9 @@ public:
 	return r;
     }
 
+    /**
+     * Stops the PWM
+     **/
     void stop() {
 	disable();
     }
