@@ -24,7 +24,6 @@ public:
 	pwmpath = chippath + "/pwm" + std::to_string(channel);
 	FILE* fp;
 	std::string p = chippath+"/export";
-	std::cout << p << std::endl;
 	fp = fopen(p.c_str(), "w");
 	if (NULL == fp) {
 	    fprintf(stderr,"PWM device does not exist. Make sure to add 'dtoverlay=pwm-2chan' to /boot/firmware/config.txt.\n");
