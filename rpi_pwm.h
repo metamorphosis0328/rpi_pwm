@@ -11,7 +11,14 @@
 
 class RPI_PWM {
 public:
-    
+
+    /**
+     * PWM class for the Raspberry PI
+     * \param channel The GPIO channel which is 2 or 3 for the RPI5
+     * \param frequency The PWM frequency
+     * \param duty_cycle The initial duty cycle of the PWM (default 0)
+     * \param chip The chip number (for RPI5 it's 2)
+     **/
     RPI_PWM(int channel, int frequency, float duty_cycle = 0, int chip = 2) {
 	chippath = "/sys/class/pwm/pwmchip" + std::to_string(chip);
 	pwmpath = chippath + "/pwm" + std::to_string(channel);
@@ -36,6 +43,10 @@ public:
 	disable();
     }
 
+    /**
+     * Sets the duty cycle.
+     * \param v The duty cycle in percent.
+     **/
     void setDutyCycle(float v) {
 	int dc = (int)round((float)per * (v / 100.0));
 	setDutyCycleNS(dc);
@@ -68,7 +79,7 @@ private:
 	FILE* fp;
 	fp = fopen(filename.c_str(), "w");
 	if (NULL == fp) {
-	    fprintf(stderr,"Cannot write to %s.",filename.c_str());
+	    fprintf(stderr,"Cannot write to %s.\n",filename.c_str());
 	    return;
 	}
 	fprintf(fp, "%d", value);
