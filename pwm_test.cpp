@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
 	channel = atoi(argv[1]);
     }
     printf("Enabling PWM on channel %d.\n",channel);
-    RPI_PWM pwm(channel, frequency);
+    RPI_PWM pwm;
+    pwm.start(channel, frequency);
     printf("Duty cycle at 50%%\n");
     pwm.setDutyCycle(50);
     getchar();
@@ -22,4 +23,5 @@ int main(int argc, char *argv[]) {
     printf("Duty cycle at 75%%\n");
     pwm.setDutyCycle(75);
     getchar();
+    pwm.stop();
 }

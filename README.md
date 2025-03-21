@@ -45,13 +45,14 @@ make
 Include `rpi_pwm.h` in your program. The library is header-only.
 
 Create an instance of the class `RPI_PWM`:
-
 ```
-RPI_PWM pwm(channel, frequency);
+RPI_PWM pwm;
 ```
-
-where `channel` is either 2 (GPIO18) or 3 (GPIO19). This
-instance starts PWM at 0% duty cycle.
+and start the PWM:
+```
+pwm.start(channel, frequency);
+```
+where `channel` is either 2 (GPIO18) or 3 (GPIO19) and starts the PWM at 0% duty cycle.
 
 To set the duty cycle just call `setDutyCycle`:
 
@@ -77,4 +78,4 @@ a final key press.
 
 ## Copyright
 
-Bernd Porr
+Bernd Porr, bernd.porr@glasgow.ac.uk

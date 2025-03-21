@@ -18,24 +18,30 @@ public:
      * \param frequency The PWM frequency
      * \param duty_cycle The initial duty cycle of the PWM (default 0)
      * \param chip The chip number (for RPI5 it's 2)
+     * \param return >0 on success and -1 if an error has happened.
      **/
-    RPI_PWM(int channel, int frequency, float duty_cycle = 0, int chip = 2) {
+    int start(int channel, int frequency, float duty_cycle = 0, int chip = 2) {
 	chippath = "/sys/class/pwm/pwmchip" + std::to_string(chip);
 	pwmpath = chippath + "/pwm" + std::to_string(channel);
-	FILE* fp;
 	std::string p = chippath+"/export";
-	fp = fopen(p.c_str(), "w");
+	FILE* const fp = fopen(p.c_str(), "w");
 	if (NULL == fp) {
 	    fprintf(stderr,"PWM device does not exist. Make sure to add 'dtoverlay=pwm-2chan' to /boot/firmware/config.txt.\n");
-	    return;
+	    return -1;
 	}
-	fprintf(fp, "%d", channel);
+	const int r = fprintf(fp, "%d", channel);
 	fclose(fp);
-	usleep(100000);
+	if (r < 0) return r;
+	usleep(100000); // it takes a while till the PWM subdir is created
 	per = (int)1E9 / frequency;
 	setPeriod(per);
 	setDutyCycle(duty_cycle);
 	enable();
+	return r;
+    }
+
+    void stop() {
+	disable();
     }
     
     ~RPI_PWM() {
@@ -45,27 +51,30 @@ public:
     /**
      * Sets the duty cycle.
      * \param v The duty cycle in percent.
+     * \param return >0 on success and -1 after an error.
      **/
-    void setDutyCycle(float v) {
-	int dc = (int)round((float)per * (v / 100.0));
-	setDutyCycleNS(dc);
+    inline int setDutyCycle(float v) const {
+	const int dc = (int)round((float)per * (v / 100.0));
+	const int r = setDutyCycleNS(dc);
+	return r;
     }
 
 private:
     
-    void setPeriod(int ns) {
+    void setPeriod(int ns) const {
 	writeSYS(pwmpath+"/"+"period", ns);
     }
 
-    void setDutyCycleNS(int ns) {
-	writeSYS(pwmpath+"/"+"duty_cycle", ns);
+    inline int setDutyCycleNS(int ns) const {
+	const int r = writeSYS(pwmpath+"/"+"duty_cycle", ns);
+	return r;
     }
 
-    void enable() {
+    void enable() const {
 	writeSYS(pwmpath+"/"+"enable", 1);
     }
 
-    void disable() {
+    void disable() const {
 	writeSYS(pwmpath+"/"+"enable", 0);
     }
 
@@ -74,15 +83,14 @@ private:
     std::string chippath;
     std::string pwmpath;
     
-    void writeSYS(std::string filename, int value) {
-	FILE* fp;
-	fp = fopen(filename.c_str(), "w");
+    inline int writeSYS(std::string filename, int value) const {
+	FILE* const fp = fopen(filename.c_str(), "w");
 	if (NULL == fp) {
-	    fprintf(stderr,"Cannot write to %s.\n",filename.c_str());
-	    return;
+	    return -1;
 	}
-	fprintf(fp, "%d", value);
+	const int r = fprintf(fp, "%d", value);
 	fclose(fp);
+	return r;
     }
     
 };
