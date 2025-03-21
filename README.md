@@ -1,7 +1,7 @@
-# Raspberry PI PWM C++ class
+# Raspberry PI 5 PWM C++ class
 
-This is a simple wrapper around the new PWM sysfs on the Raspberry PI.
-It has been tested on the new Raspberry PI 5.
+This is a simple wrapper around the new PWM sysfs on the Raspberry PI running Debian bookworm.
+It has been tested on the Raspberry PI 5 and the documentation below is for it.
 
 ## Setup
 
@@ -26,7 +26,7 @@ that you see:
 35: a3    pd | lo // GPIO19 = PWM0_CHAN3
 ```
 
-which correspond to:
+which corresponds to the sysfs files:
 
 ```
 /sys/class/pwm/pwmchip2/pwm2: GPIO18 
@@ -42,16 +42,18 @@ make
 
 ## Usage
 
-Create a class:
+Include `rpi_pwm.h` in your program. The library is header-only.
+
+Create an instance of the class `RPI_PWM`:
 
 ```
 RPI_PWM pwm(channel, frequency);
 ```
 
-where channel is either 2 (GPIO18) or 3 (GPIO19). This then creates
-an instance which enables the PWM at 0% duty cycle.
+where `channel` is either 2 (GPIO18) or 3 (GPIO19). This
+instance starts PWM at 0% duty cycle.
 
-To set the duty cycle just write:
+To set the duty cycle just call `setDutyCycle`:
 
 ```
 pwm.setDutyCycle(duty_cycle);
@@ -67,7 +69,7 @@ where `duty_cycle` is a value between 0 and 100.
 ./pwm_test <channel>
 ```
 
-where channel can be either 2 or 3. Default is 2.
+where channel can be either 2 (GPIO18) or 3 (GPIO19). Default is 2.
 
 It starts with a duty of 50%. If you press a key it changes it to 25%
 and then after another key press to 75%. Then it exists after
