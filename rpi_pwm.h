@@ -9,6 +9,11 @@
 #include <iostream>
 #include<math.h>
 
+// Angle to pulsewidth (us) for servo
+#define SERVO_PULSE_MIN     1000     // 0°
+#define SERVO_PULSE_CENTER  1500    // 90°
+#define SERVO_PULSE_MAX     2000    // 180°
+
 /**
  * PWM class for the Raspberry PI 5
  **/
@@ -20,10 +25,10 @@ public:
      * \param channel The GPIO channel which is 2 or 3 for the RPI5
      * \param frequency The PWM frequency
      * \param duty_cycle The initial duty cycle of the PWM (default 0)
-     * \param chip The chip number (for RPI5 it's 2)
+     * \param chip The chip number
      * \param return >0 on success and -1 if an error has happened.
      **/
-    int start(int channel, int frequency, float duty_cycle = 0, int chip = 2) {
+    int start(int channel, int frequency, float duty_cycle = 0, int chip = 0) {
         chippath = "/sys/class/pwm/pwmchip" + std::to_string(chip);
         pwmpath = chippath + "/pwm" + std::to_string(channel);
         std::string p = chippath+"/export";
@@ -63,6 +68,17 @@ public:
         const int dc = (int)round((float)per * (v / 100.0));
         const int r = setDutyCycleNS(dc);
         return r;
+    }
+
+    /**
+     * Sets the pulse width in microseconds. (use to controlling servo)
+     * \param us The pulse width (e.g. 1500 for 1.5ms)
+     * \return >0 on success, -1 on error.
+     */
+    inline int setPulseWidth(int us) const {
+    // 1 microsecond = 1000 nanoseconds
+    int ns = us * 1000;
+    return setDutyCycleNS(ns);
     }
 
 private:

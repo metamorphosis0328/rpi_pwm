@@ -7,21 +7,29 @@
 
 int main(int argc, char *argv[]) {
     int channel = 2;
-    int frequency = 100; // Hz
+    int frequency = 50; // Hz
     if (argc > 1) {
-    channel = atoi(argv[1]);
+        channel = atoi(argv[1]);
     }
     printf("Enabling PWM on channel %d.\n",channel);
     RPI_PWM pwm;
     pwm.start(channel, frequency);
-    printf("Duty cycle at 50%%\n");
-    pwm.setDutyCycle(50);
+
+    printf("Angle: 0°\n");
+    pwm.setPulseWidth(SERVO_PULSE_MIN);
     getchar();
-    printf("Duty cycle at 25%%\n");
-    pwm.setDutyCycle(25);
+
+    printf("Angle: 90°\n");
+    pwm.setPulseWidth(SERVO_PULSE_CENTER);
     getchar();
-    printf("Duty cycle at 75%%\n");
-    pwm.setDutyCycle(75);
+
+    printf("Angle: 180°\n");
+    pwm.setPulseWidth(SERVO_PULSE_MAX);
     getchar();
+
+    printf("Back to 90°\n");
+    pwm.setPulseWidth(SERVO_PULSE_CENTER);
+    getchar();
+
     pwm.stop();
 }
