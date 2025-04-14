@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     int channel = 2;
     int frequency = 100; // Hz
     if (argc > 1) {
-	channel = atoi(argv[1]);
+    channel = atoi(argv[1]);
     }
     printf("Enabling PWM on channel %d.\n",channel);
     RPI_PWM pwm;
